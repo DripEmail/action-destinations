@@ -6,18 +6,18 @@ const action: ActionDefinition<Settings, Payload> = {
   title: 'Test Action',
   description: '',
   fields: {},
-  perform: (request, _) => {
+  perform: (request, { settings, payload }) => {
     // Make your partner api request here!
     // return request('https://example.com', {
     //   method: 'post',
     //   json: data.payload
     // })
-    return request('https://api.getdrip.com/v2/2445926/subscribers', {
+    return request(`${settings.endpoint}/2445926/subscribers`, {
       method: 'post',
       json: {
         subscribers: [
           {
-            email: 'jacob.meyer+prod98@drip.com',
+            email: payload.email,
             initial_status: 'unsubscribed',
             source: 'yotpo_loyalty',
             internal_attributes: {
@@ -26,6 +26,7 @@ const action: ActionDefinition<Settings, Payload> = {
           }
         ]
       }
+      // json: payload
     })
   }
 }

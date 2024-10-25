@@ -16,6 +16,13 @@ const destination: DestinationDefinition<Settings> = {
         description: 'API key for your Drip account. You can find this in your Drip account settings.',
         type: 'string',
         required: true
+      },
+      endpoint: {
+        label: 'API Endpoint',
+        description: 'For Drip API, the endpoint is https://api.getdrip.com/v2/.',
+        type: 'string',
+        required: true,
+        default: 'https://api.getdrip.com/v2/'
       }
     }
     // testAuthentication: (request) => {
