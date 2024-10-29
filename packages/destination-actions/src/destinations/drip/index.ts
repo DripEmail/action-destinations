@@ -3,6 +3,8 @@ import type { Settings } from './generated-types'
 
 import testAction from './testAction'
 
+import trackEvent from './trackEvent'
+
 const destination: DestinationDefinition<Settings> = {
   name: 'Drip',
   slug: 'drip',
@@ -22,7 +24,7 @@ const destination: DestinationDefinition<Settings> = {
         description: 'For Drip API, the endpoint is https://api.getdrip.com/v2/.',
         type: 'string',
         required: true,
-        default: 'https://api.getdrip.com/v2/'
+        default: 'https://api.getdrip.com/v2'
       }
     }
     // testAuthentication: (request) => {
@@ -51,7 +53,8 @@ const destination: DestinationDefinition<Settings> = {
   // },
 
   actions: {
-    testAction
+    testAction,
+    trackEvent
   }
 }
 
