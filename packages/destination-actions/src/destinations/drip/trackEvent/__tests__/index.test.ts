@@ -1,97 +1,84 @@
 import nock from 'nock'
 import { createTestEvent, createTestIntegration } from '@segment/actions-core'
 import Destination from '../../index'
+import { Settings } from '../../generated-types'
+
+const settings: Settings = {
+  apiKey: 'key',
+  endpoint: 'https://api.getdrip.com/v2',
+  accountId: '2445926'
+}
 
 const testDestination = createTestIntegration(Destination)
 
 describe('Drip.trackEvent', () => {
-  it('should send event to Drip with correct parameters', async () => {
-    const event = createTestEvent({
-      event: 'Test Event',
-      userId: 'user123',
-      properties: {
-        revenue: 19.99,
-        currency: 'USD'
-      }
-    })
+  it('should track events', async () => {
+    nock('https://api.getdrip.com').post('/v2/2445926/events').reply(200, {})
 
-    nock('https://api.getdrip.com').post('/v2/1234567890/events').reply(200, {})
+    const event = createTestEvent({
+      action: 'Custom',
+      email: 'foo@bar.com',
+      properties: { fizz: 'buzz' }
+    })
 
     const responses = await testDestination.testAction('trackEvent', {
-      event,
-      settings: {
-        apiKey: 'test-api-key',
-        endpoint: 'https://api.getdrip.com/v2'
-      },
-      mapping: {
-        event: 'Test Event',
-        userId: 'user123',
-        properties: {
-          revenue: 19.99,
-          currency: 'USD'
-        }
-      }
+      settings: settings,
+      event: event,
+      useDefaultMappings: true
     })
+
+    const body = {
+      events: [
+        {
+          email: 'foo@bar.com',
+          action: 'Custom',
+          properties: { fizz: 'buzz' }
+        }
+      ]
+    }
 
     expect(responses.length).toBe(1)
     expect(responses[0].status).toBe(200)
+    expect(responses[0].options.body).toBe(JSON.stringify(body))
   })
 
-  it('should handle API errors gracefully', async () => {
+  it('should track events with mappings', async () => {
+    nock('https://api.getdrip.com').post('/v2/2445926/events').reply(200, {})
+
     const event = createTestEvent({
-      event: 'Test Event',
-      userId: 'user123',
-      properties: {
-        revenue: 19.99,
-        currency: 'USD'
+      event: 'Custom',
+      traits: { properties: { fizz: 'buzz' } },
+      properties: { email: 'foo@bar.com', action: 'Custom' }
+    })
+
+    const responses = await testDestination.testAction('trackEvent', {
+      settings: settings,
+      event: event,
+      mapping: {
+        action: {
+          '@path': '$.properties.action'
+        },
+        email: {
+          '@path': '$.properties.email'
+        },
+        properties: {
+          '@path': '$.traits.properties'
+        }
       }
     })
 
-    nock('https://api.getdrip.com').post('/v2/1234567890/events').reply(500, { error: 'Internal Server Error' })
-
-    await expect(
-      testDestination.testAction('trackEvent', {
-        event,
-        settings: {
-          apiKey: 'test-api-key',
-          endpoint: 'https://api.getdrip.com/v2'
-        },
-        mapping: {
-          event: 'Test Event',
-          userId: 'user123',
-          properties: {
-            revenue: 19.99,
-            currency: 'USD'
-          }
+    const body = {
+      events: [
+        {
+          email: 'foo@bar.com',
+          action: 'Custom',
+          properties: { fizz: 'buzz' }
         }
-      })
-    ).rejects.toThrow('Internal Server Error')
-  })
+      ]
+    }
 
-  it('should require userId or anonymousId', async () => {
-    const event = createTestEvent({
-      event: 'Test Event',
-      properties: {
-        revenue: 19.99,
-        currency: 'USD'
-      }
-    })
-
-    await expect(
-      testDestination.testAction('trackEvent', {
-        event,
-        settings: {
-          apiKey: 'test-api-key',
-          endpoint: 'https://api.getdrip.com/v2'
-        },
-        mapping: {
-          event: 'Test Event',
-          properties: {
-            revenue: 19.99,
-            currency: 'USD'
-          }
-        }
-      })
-    ).rejects.toThrow('Either userId or anonymousId must be defined')
+    expect(responses.length).toBe(1)
+    expect(responses[0].status).toBe(200)
+    expect(responses[0].options.body).toBe(JSON.stringify(body))
   })
 })

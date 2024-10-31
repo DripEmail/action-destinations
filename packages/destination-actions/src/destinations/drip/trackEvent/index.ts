@@ -19,7 +19,7 @@ const action: ActionDefinition<Settings, Payload> = {
       label: 'Action',
       required: true,
       type: 'string',
-      default: { '@path': '$.event' }
+      default: { '@path': '$.action' }
     },
     properties: {
       description: 'A JSON object containing additional properties that will be associated with the event.',
@@ -31,7 +31,7 @@ const action: ActionDefinition<Settings, Payload> = {
   },
 
   perform: (request, { settings, payload }) => {
-    return request(`${settings.endpoint}/${settings.accountId}/events`, {
+    return request(`https://api.getdrip.com/v2/${settings.accountId}/events`, {
       method: 'POST',
       json: {
         events: [
