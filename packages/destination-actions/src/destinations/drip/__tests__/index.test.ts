@@ -8,16 +8,13 @@ const testDestination = createTestIntegration(Definition)
 describe('Drip', () => {
   describe('testAuthentication', () => {
     it('should validate authentication inputs', async () => {
-      nock('https://your.destination.endpoint').get('*').reply(200, {})
+      nock('https://api.getdrip.com').get('/v2/user').reply(200, {})
 
       // This should match your authentication.fields
       const authData = {
-        apiKey: {
-          label: 'API Key',
-          description: 'API key for your Drip account. You can find this in your Drip account settings.',
-          type: 'string',
-          required: true
-        }
+        apiKey: 'abc123',
+        accountId: '42',
+        endpoint: 'https://api.getdrip.com/v2'
       }
 
       await expect(testDestination.testAuthentication(authData)).resolves.not.toThrowError()
