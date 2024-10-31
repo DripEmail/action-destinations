@@ -1,8 +1,6 @@
 import type { DestinationDefinition } from '@segment/actions-core'
 import type { Settings } from './generated-types'
 
-import testAction from './testAction'
-
 import trackEvent from './trackEvent'
 
 const destination: DestinationDefinition<Settings> = {
@@ -25,16 +23,21 @@ const destination: DestinationDefinition<Settings> = {
         type: 'string',
         required: true,
         default: 'https://api.getdrip.com/v2'
+      },
+      accountId: {
+        label: 'Account ID',
+        description: 'Account ID for your Drip account. You can find this in your Drip account settings.',
+        type: 'string',
+        required: true
       }
+    },
+    testAuthentication: (request) => {
+      // return request(`https://api.getdrip.com/accounts/`, {
+      //   method: 'get'
+      // })
+      request
+      return true
     }
-    // testAuthentication: (request) => {
-    //   // Return a request that tests/validates the user's credentials.
-    //   // If you do not have a way to validate the authentication fields safely,
-    //   // you can remove the `testAuthentication` function, though discouraged.
-    // }
-    // return request(`${API_URL}/accounts/`, {
-    //   method: 'get'
-    // })
   },
 
   extendRequest({ settings }) {
@@ -53,7 +56,6 @@ const destination: DestinationDefinition<Settings> = {
   // },
 
   actions: {
-    testAction,
     trackEvent
   }
 }

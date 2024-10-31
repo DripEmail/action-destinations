@@ -2,49 +2,17 @@
 
 export interface Payload {
   /**
-   * The city of the user who triggered the event
-   */
-  city?: string
-  /**
-   * The country of the user who triggered the event
-   */
-  country?: string
-  /**
-   * The email of the user who triggered the event
+   * The person's email address.
    */
   email: string
   /**
-   * The name of the event you want to track
+   * The name of the action.
    */
-  event: string
+  action: string
   /**
-   * The IP address of the user who triggered the event
+   * A JSON object containing additional properties that will be associated with the event.
    */
-  ip_address?: string
-  /**
-   * Additional information about the event
-   */
-  properties: {
+  properties?: {
     [k: string]: unknown
   }
-  /**
-   * The phone number of the user who triggered the event
-   */
-  sms?: string
-  /**
-   * The state of the user who triggered the event
-   */
-  state?: string
-  /**
-   * Tags for the subscriber
-   */
-  tags?: string
-  /**
-   * The timezone of the user who triggered the event
-   */
-  time_zone?: string
-  /**
-   * The ID of the user who triggered the event
-   */
-  userId?: string
 }
