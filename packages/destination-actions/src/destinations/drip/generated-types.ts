@@ -6,9 +6,9 @@ export interface Settings {
    */
   apiKey: string
   /**
-   * For Drip API, the endpoint is https://api.getdrip.com/v2/.
+   * The standard Drip API, the endpoint is https://api.getdrip.com/v2/.
    */
-  endpoint: string
+  endpoint?: string
   /**
    * Account ID for your Drip account. You can find this in your Drip account settings.
    */

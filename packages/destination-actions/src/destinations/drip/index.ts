@@ -18,10 +18,10 @@ const destination: DestinationDefinition<Settings> = {
         required: true
       },
       endpoint: {
-        label: 'API Endpoint',
-        description: 'For Drip API, the endpoint is https://api.getdrip.com/v2/.',
+        label: 'Custom API Endpoint',
+        description: 'The standard Drip API, the endpoint is https://api.getdrip.com/v2/.',
         type: 'string',
-        required: true,
+        required: false,
         default: 'https://api.getdrip.com/v2'
       },
       accountId: {
