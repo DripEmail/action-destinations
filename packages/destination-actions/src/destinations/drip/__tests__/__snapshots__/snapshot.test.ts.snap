@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing snapshot for drip destination: trackEvent action - all fields 1`] = `
+Object {
+  "events": Array [
+    Object {
+      "action": "3HuH7[PXcafD",
+      "email": "bigip@rev.vg",
+      "properties": Object {
+        "testType": "3HuH7[PXcafD",
+      },
+    },
+  ],
+}
+`;
+
+exports[`Testing snapshot for drip destination: trackEvent action - required fields 1`] = `
+Object {
+  "events": Array [
+    Object {
+      "action": "3HuH7[PXcafD",
+      "email": "bigip@rev.vg",
+    },
+  ],
+}
+`;
