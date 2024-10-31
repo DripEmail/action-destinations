@@ -32,11 +32,9 @@ const destination: DestinationDefinition<Settings> = {
       }
     },
     testAuthentication: (request) => {
-      // return request(`https://api.getdrip.com/accounts/`, {
-      //   method: 'get'
-      // })
-      request
-      return true
+      return request(`https://api.getdrip.com/v2/user`, {
+        method: 'get'
+      })
     }
   },
 
