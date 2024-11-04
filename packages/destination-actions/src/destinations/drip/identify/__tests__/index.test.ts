@@ -53,7 +53,7 @@ describe('Drip.identify', () => {
 
     expect(responses.length).toBe(1)
     expect(responses[0].status).toBe(200)
-    expect(responses[0].options.body).toBe(JSON.stringify(body))
+    expect(JSON.parse(responses[0].options.body)).toEqual(body)
   })
 
   // TODO: should identify with mappings
@@ -78,8 +78,8 @@ describe('Drip.identify', () => {
         {
           email: 'foo@bar.com',
           ip_address: '8.8.8.8', // This could be wrong. Is this the IP address of the client, or segment?
-          time_zone: 'Europe/Amsterdam',
-          status: 'unsubscribed'
+          status: 'unsubscribed',
+          time_zone: 'Europe/Amsterdam'
         }
       ]
     }
@@ -89,5 +89,75 @@ describe('Drip.identify', () => {
     expect(responses[0].options.body).toBe(JSON.stringify(body))
   })
 
-  // TODO: should batch identify with mappings
+  it('should batch identify with custom mappings', async () => {
+    nock('https://api.getdrip.com').post('/v2/2445926/subscribers/batches').reply(200, {})
+
+    const event = createTestEvent({
+      context: {
+        ip: '127.0.0.1',
+        timezone: 'UTC'
+      },
+      traits: {
+        properties: {
+          email: 'test@example.com',
+          status: 'active',
+          statusUpdatedAt: '2023-01-01T00:00:00Z',
+          customFields: {
+            plan: 'premium',
+            company: 'Acme Inc'
+          },
+          tags: 'vip,premium'
+        }
+      }
+    })
+
+    const responses = await testDestination.testBatchAction('identify', {
+      settings: settings,
+      events: [event],
+      mapping: {
+        email: {
+          '@path': '$.traits.properties.email'
+        },
+        status: {
+          '@path': '$.traits.properties.status'
+        },
+        statusUpdatedAt: {
+          '@path': '$.traits.properties.statusUpdatedAt'
+        },
+        customFields: {
+          '@path': '$.traits.properties.customFields'
+        },
+        tags: {
+          '@path': '$.traits.properties.tags'
+        },
+        ip: {
+          '@path': '$.context.ip'
+        },
+        timezone: {
+          '@path': '$.context.timezone'
+        }
+      }
+    })
+
+    const body = {
+      subscribers: [
+        {
+          custom_fields: {
+            plan: 'premium',
+            company: 'Acme Inc'
+          },
+          email: 'test@example.com',
+          ip_address: '127.0.0.1',
+          status: 'active',
+          status_updated_at: '2023-01-01T00:00:00Z',
+          tags: 'vip,premium',
+          time_zone: 'UTC'
+        }
+      ]
+    }
+
+    expect(responses.length).toBe(1)
+    expect(responses[0].status).toBe(200)
+    expect(responses[0].options.body).toBe(JSON.stringify(body))
+  })
 })
