@@ -16,10 +16,6 @@ export interface Payload {
    */
   ip?: string
   /**
-   * The person's new email address.
-   */
-  newEmail?: string
-  /**
    * The person's sms number.
    */
   sms?: string

@@ -22,7 +22,6 @@ describe('Drip.identify', () => {
       },
       traits: {
         email: 'test@example.com',
-        newEmail: 'test2@example.com',
         sms: '1234567890',
         status: 'unsubscribed',
         statusUpdatedAt: '2021-01-01T00:00:00Z'
@@ -43,7 +42,6 @@ describe('Drip.identify', () => {
       custom_fields: { fizz: 'buzz' },
       email: 'test@example.com',
       ip_address: '127.0.0.1',
-      new_email: 'test2@example.com',
       sms_number: '1234567890',
       status: 'unsubscribed',
       status_updated_at: '2021-01-01T00:00:00Z',

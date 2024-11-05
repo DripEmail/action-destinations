@@ -44,14 +44,6 @@ const action: ActionDefinition<Settings, Payload> = {
       format: 'ipv4',
       default: { '@path': '$.context.ip' }
     },
-    newEmail: {
-      description: "The person's new email address.",
-      label: 'New Email Address',
-      required: false,
-      type: 'string',
-      format: 'email',
-      default: { '@path': '$.traits.newEmail' }
-    },
     sms: {
       description: "The person's sms number.",
       label: 'SMS Number',
