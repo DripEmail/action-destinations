@@ -45,7 +45,7 @@ describe('Drip.identify', () => {
       sms_number: '1234567890',
       status: 'unsubscribed',
       status_updated_at: '2021-01-01T00:00:00Z',
-      tags: 'tag1,tag2',
+      tags: ['tag1', 'tag2'],
       time_zone: 'Europe/Amsterdam'
     }
 
@@ -148,7 +148,7 @@ describe('Drip.identify', () => {
           ip_address: '127.0.0.1',
           status: 'active',
           status_updated_at: '2023-01-01T00:00:00Z',
-          tags: 'vip,premium',
+          tags: ['vip', 'premium'],
           time_zone: 'UTC'
         }
       ]

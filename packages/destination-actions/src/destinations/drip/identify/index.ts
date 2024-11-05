@@ -7,11 +7,10 @@ const person = (payload: Payload) => {
     custom_fields: payload.customFields,
     email: payload.email,
     ip_address: payload.ip,
-    new_email: payload.newEmail,
     sms_number: payload.sms,
     status: payload.status,
     status_updated_at: payload.statusUpdatedAt,
-    tags: payload.tags,
+    tags: payload.tags?.split(',').map((tag) => tag.trim()),
     time_zone: payload.timezone
     // prospect: true // omit for now, lead scoring is not promoted by our product
   }
